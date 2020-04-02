@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -ex
+
+########################################################################
+# Configurable EXPERIMENT specific environment parameters
+export machine="HERA"
+export CDUMP=gdas
+export CDATE=2019050106
+export EXPNAME="testPrep"
+export EXPDIR="/scratch1/NCEPDEV/global/Rahul.Mahajan/git/prepOnly"
+export PRVT=$EXPDIR/fix/prepobs_errtable.global
+export ROTDIR="/scratch1/NCEPDEV/stmp2/$USER/ROTDIR/$EXPNAME"
+export RUNDIR="/scratch1/NCEPDEV/stmp2/$USER/RUNDIR/$EXPNAME"
+
+# Commonly defined parameters in JJOBS
+
+# Build paths for Obsproc
+export HOMEobsproc_prep="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_prep_RB-5.2.0"
+export HOMEobsproc_network="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_global.v3.2.3"
+
+########################################################################
+
+########## config.base ##########
+# Common to all steps
+
+echo "BEGIN: config.base"
+
+# GLOBAL static environment parameters (machine dependent)
+if [ $machine = "HERA" ]; then
+  export NWPROD="/scratch1/NCEPDEV/global/glopara/nwpara"
+  export DMPDIR="/scratch1/NCEPDEV/global/glopara/dump"
+elif [ $machine = "WCOSS_C" ]; then
+  export NWPROD="/gpfs/hps/nco/ops/nwprod"
+  export DMPDIR="/gpfs/dell3/emc/global/dump"
+elif [ $machine = "WCOSS_DELL_P3" ]; then
+  export NWPROD="/gpfs/dell1/nco/ops/nwprod"
+  export DMPDIR="/gpfs/dell3/emc/global/dump"
+fi
+
+# CONVENIENT utility scripts and other environment parameters
+export NCP="/bin/cp -p"
+export NMV="/bin/mv"
+export NLN="/bin/ln -sf"
+export VERBOSE="YES"
+export KEEPDATA="YES"
+export CHGRP_CMD="chgrp rstprod"
+
+export DUMP_SUFFIX=""
+export HOMEgfs=$EXPDIR  # JGLOBAL_PREP references this variable
+
+export RUN_ENVIR="emc"
+export envir=${envir:-"prod"}
+export NET="gfs"
+export RUN=${RUN:-${CDUMP:-"gfs"}}
+export ERRSCRIPT=${ERRSCRIPT:-'eval [[ $err = 0 ]]'}
+export LOGSCRIPT=${LOGSCRIPT:-""}
+export REDOUT="1>"
+export REDERR="2>"
+
+echo "END: config.base"

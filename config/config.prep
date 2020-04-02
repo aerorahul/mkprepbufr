@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -ex
+
+########## config.prep ##########
+# prep step specific
+
+echo "BEGIN: config.prep"
+
+# Get task specific resources
+. $EXPDIR/config/config.resources prep
+
+if [ $machine = "HERA" ]; then
+  export GESROOT=/scratch1/NCEPDEV/rstprod   # set by module prod_envir on WCOSS_C
+fi
+
+echo "END: config.prep"

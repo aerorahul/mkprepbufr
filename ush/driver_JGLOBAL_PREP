@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -x
+
+###############################################################
+# Source modules
+. $EXPDIR/ush/load_modules.sh
+status=$?
+[[ $status -ne 0 ]] && exit $status
+
+###############################################################
+# Source relevant configs
+configs="base prep"
+for config in $configs; do
+    . $EXPDIR/config/config.${config}
+    status=$?
+    [[ $status -ne 0 ]] && exit $status
+done
+
+###############################################################
+# Source machine runtime environment
+. $EXPDIR/env/${machine}.env prep
+status=$?
+[[ $status -ne 0 ]] && exit $status
+
+###############################################################
+# Set script and dependency variables
+export PDY=$(echo $CDATE | cut -c1-8)
+export cyc=$(echo $CDATE | cut -c9-10)
+export OPREFIX="${CDUMP}.t${cyc}z."
+export COMOUT="$ROTDIR/$CDUMP.$PDY/$cyc"
+[[ ! -d $COMOUT ]] && mkdir -p $COMOUT
+
+###############################################################
+# We are not running TC relocation
+# Copy existing tcvital data from global dump
+$NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${CDUMP}.t${cyc}z.syndata.tcvitals.tm00 $COMOUT/
+
+###############################################################
+# Generate prepbufr files from global dump
+rm -f $COMOUT/${OPREFIX}prepbufr
+rm -f $COMOUT/${OPREFIX}prepbufr.acft_profiles
+rm -f $COMOUT/${OPREFIX}nsstbufr
+
+export job="j${CDUMP}_prep_${cyc}"
+export DATAROOT="$RUNDIR/$CDATE/$CDUMP/prepbufr"
+export COMSP=${COMSP:-$DMPDIR/$CDUMP$DUMP_SUFFIX.$PDY/$cyc/$CDUMP.t${cyc}z.}
+export COMIN=${COMIN:-$ROTDIR/$CDUMP.$PDY/$cyc}
+export COMINgdas=${COMINgdas:-$ROTDIR/gdas.$PDY/$cyc}
+export COMINgfs=${COMINgfs:-$ROTDIR/gfs.$PDY/$cyc}
+
+$HOMEobsproc_network/jobs/JGLOBAL_PREP
+status=$?
+[[ $status -ne 0 ]] && exit $status
+
+################################################################################
+# Exit out cleanly
+exit 0

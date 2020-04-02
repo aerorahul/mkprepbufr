@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -ex
+
+########## config.resources ##########
+# Set resource information for job tasks
+# e.g. walltime, node, cores per node, memory etc.
+
+if [ $# -ne 1 ]; then
+
+    echo "Must specify an input task argument to set resource variables!"
+    echo "argument can be any one of the following:"
+    echo "prep"
+    exit 1
+
+fi
+
+step=$1
+
+echo "BEGIN: config.resources"
+
+if [ $step = "prep" ]; then
+
+    eval "export wtime_$step='00:30:00'"
+    eval "export npe_$step=4"
+    eval "export npe_node_$step=4"
+    eval "export nth_$step=1"
+
+else
+
+    echo "ERROR: $step is not enabled on $machine, ABORT!"
+    exit 2
+
+fi
+
+echo "END: config.resources"
