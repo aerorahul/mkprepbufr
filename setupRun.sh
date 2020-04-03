@@ -5,11 +5,11 @@ set -x
 source config/config.base
 
 PDY=${CDATE:0:8}
-cyc=${CDATE:9:10}
+cyc=${CDATE:8:10}
 
 GDATE=$(date -d "$PDY $cyc -6 hours" +%Y%m%d%H)
 gPDY=${GDATE:0:8}
-gcyc=${GDATE:9:10}
+gcyc=${GDATE:8:10}
 
 mkdir -p $ROTDIR
 mkdir -p $ROTDIR/$CDUMP.$gPDY/$gcyc
