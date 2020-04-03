@@ -2,22 +2,25 @@
 
 set -ex
 
+# The top of the git-clone is our EXPDIR
+EXPDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. >/dev/null 2>&1 && pwd )"
+
 ########################################################################
 # Configurable EXPERIMENT specific environment parameters
 export machine="HERA"
+
 export CDUMP=gdas
 export CDATE=2019050106
-export EXPNAME="testPrep"
-export EXPDIR="/scratch1/NCEPDEV/global/Rahul.Mahajan/git/prepOnly"
-export PRVT=$EXPDIR/fix/prepobs_errtable.global
-export ROTDIR="/scratch1/NCEPDEV/stmp2/$USER/ROTDIR/$EXPNAME"
-export RUNDIR="/scratch1/NCEPDEV/stmp2/$USER/RUNDIR/$EXPNAME"
-
-# Commonly defined parameters in JJOBS
+export PSLOT="testPrep"
+export ROTDIR="/scratch1/NCEPDEV/stmp2/$USER/ROTDIR/$PSLOT"
+export RUNDIR="/scratch1/NCEPDEV/stmp2/$USER/RUNDIR/$PSLOT"
 
 # Build paths for Obsproc
 export HOMEobsproc_prep="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_prep_RB-5.2.0"
 export HOMEobsproc_network="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_global.v3.2.3"
+
+# Error table used in prepbufr
+export PRVT=$EXPDIR/fix/prepobs_errtable.global
 
 ########################################################################
 
