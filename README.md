@@ -22,6 +22,7 @@ Extract the `prep` step of the global-workflow related to generation of prepbufr
         gdas.t00z.atmf006.nemsio
         gdas.t00z.atmf009.nemsio
         ```
+    - A soft-link to the `$ROTDIR` and `$RUNDIR` will be placed in the experiment directory for easy access.
 
 4. Grab an interactive compute node:
     
