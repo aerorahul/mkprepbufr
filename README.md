@@ -1,5 +1,5 @@
 # mkprepbufr
-Extract bits of global-workflow related to generation of prepbufr file.
+Extract the `prep` step of the global-workflow related to generation of prepbufr files.  This repository in essense set's up the execution of `JGLOBAL_PREP` on Hera and WCOSS_DELL_P3 (Venus and Mars).
 
 ## Lazy Instructions
 1. Clone this repository and cd into it.
@@ -9,38 +9,33 @@ Extract bits of global-workflow related to generation of prepbufr file.
     ```
 
 2. Edit the top section in `config/config.base` to configure your run between the `BEGIN` and `END` comments:
-    - change the experiment parameters.
-    - provide path to obsproc builds. Pre-built paths to HERA are provided here for reference. The user can build their own versions, and point those directories to these variables here.
+    - change the experiment parameters; e.g. `PSLOT` etc.
+    - provide path to obsproc builds in `HOMEobsproc_prep` and `HOMEobsproc_global`. Pre-built paths on Hera and WCOSS_DELL_P3 are provided here for reference.
 
-3. Drop a set of backgrounds in $ROTDIR from the previous cycle:
-    - Set of example backgrounds (C96 resolution) initialized at 2019050100 (GDATE) are at:
+3. `setupRun.sh` will setup the `ROTDIR` and copy a set of backgrounds from the previous cycle:
+    - Set of example backgrounds (C96 resolution) initialized at 2019050100 (GDATE) can be used.
         ```
-        $> cd /scratch1/NCEPDEV/stmp2/Rahul.Mahajan/ROTDIR/testPrep/gdas.20190501/00
-        $> ls -1
+        $> setupRun.sh
+        $> ls -1 $ROTDIR/gdas.20190501/00
         gdas.t00z.atmf000.nemsio
         gdas.t00z.atmf003.nemsio
         gdas.t00z.atmf006.nemsio
         gdas.t00z.atmf009.nemsio
         ```
-    - To use these, I am providing a `setupRun.sh`. To use it (on Hera only):
-        ```
-        $> setupRun.sh
-        ```
 
 4. Grab an interactive compute node:
-    On Hera:
+    
     ```
-    $> salloc --partition=hera --qos=debug --account=fv3-cpu --nodes=1 --ntasks-per-node=4 --time=00:15:00 --chdir=$PWD --job-name=InteractiveJob
+    heraFE$> salloc --partition=hera --qos=debug --account=fv3-cpu --nodes=1 --ntasks-per-node=4 --time=00:15:00 --chdir=$PWD --job-name=InteractiveJob
     ```
-    On WCOSS Dell Phase 3 (Venus and Mars):
     ```
-    $> bsub -Is -J InteractiveJob -P GFS-DEV -q debug -W 00:30 -n 4 -R 'span[ptile=4] affinity[core(1)]'  bash
+    wcossP3FE$> bsub -Is -J InteractiveJob -P GFS-DEV -q debug -W 00:30 -n 4 -R 'span[ptile=4] affinity[core(1)]'  bash
     ```
     When a compute note is available, execute:
     ```
-    $onComputeNode> runJGLOBAL_PREP.sh >& runLog.txt 2>&1
+    $computeNode> runJGLOBAL_PREP.sh >& runLog.txt 2>&1
     ```
-    `runJGLOBAL_PREP.sh will call `JGLOBAL_PREP`
+    `runJGLOBAL_PREP.sh` will call `JGLOBAL_PREP`
 
 
 5. You are now ready to run this over and over and over.
