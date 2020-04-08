@@ -6,22 +6,37 @@ set -ex
 EXPDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. >/dev/null 2>&1 && pwd )"
 
 ########################################################################
-# Configurable EXPERIMENT specific environment parameters
-export machine="HERA"
+# BEGIN: Configurable EXPERIMENT specific environment parameters
+export machine="WCOSS_DELL_P3"
 
 export CDUMP=gdas
 export CDATE=2019050106
-export PSLOT="testPrep"
-export ROTDIR="/scratch1/NCEPDEV/stmp2/$USER/ROTDIR/$PSLOT"
-export RUNDIR="/scratch1/NCEPDEV/stmp2/$USER/RUNDIR/$PSLOT"
+export PSLOT="testwcoss"
 
-# Build paths for Obsproc
-export HOMEobsproc_prep="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_prep_RB-5.2.0"
-export HOMEobsproc_network="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_global.v3.2.3"
+# Temporary spaces for work (machine dependent)
+if [ $machine = "HERA" ]; then
+  STMP="/scratch1/NCEPDEV/stmp2/$USER"
+elif [ $machine = "WCOSS_DELL_P3" ]; then
+  STMP="/gpfs/dell2/stmp/$USER"
+fi
+
+# Where the work is done
+export ROTDIR="$STMP/ROTDIR/$PSLOT"
+export RUNDIR="$STMP/RUNDIR/$PSLOT"
 
 # Error table used in prepbufr
 export PRVT=$EXPDIR/fix/prepobs_errtable.global
 
+# Build paths for Obsproc (Replace with custom builds for development)
+if [ $machine = "HERA" ]; then
+  export HOMEobsproc_prep="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_prep_RB-5.2.0"
+  export HOMEobsproc_network="/scratch1/NCEPDEV/global/glopara/git/obsproc/obsproc_global.v3.2.3"
+elif [ $machine = "WCOSS_DELL_P3" ]; then
+  export HOMEobsproc_prep="/gpfs/dell2/emc/modeling/noscrub/emc.glopara/git/obsproc/obsproc_prep_RB-5.2.0"
+  export HOMEobsproc_network="/gpfs/dell2/emc/modeling/noscrub/emc.glopara/git/obsproc/obsproc_global.v3.2.3"
+fi
+
+# END: Configurable EXPERIMENT specific environment parameters
 ########################################################################
 
 ########## config.base ##########

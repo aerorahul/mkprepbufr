@@ -27,10 +27,20 @@ Extract bits of global-workflow related to generation of prepbufr file.
         $> setupRun.sh
         ```
 
-4. Grab an interactive node on Hera/WCOSS_C and execute: (example for Hera below [1 node 4 processes, appropriate for the C96 files above]):
+4. Grab an interactive compute node:
+    On Hera:
     ```
     $> salloc --partition=hera --qos=debug --account=fv3-cpu --nodes=1 --ntasks-per-node=4 --time=00:15:00 --chdir=$PWD --job-name=InteractiveJob
-    $onComputeNode> runMe.sh >& runLog 2>&1
     ```
+    On WCOSS Dell Phase 3 (Venus and Mars):
+    ```
+    $> bsub -Is -J InteractiveJob -P GFS-DEV -q debug -W 00:30 -n 4 -R 'span[ptile=4] affinity[core(1)]'  bash
+    ```
+    When a compute note is available, execute:
+    ```
+    $onComputeNode> runJGLOBAL_PREP.sh >& runLog.txt 2>&1
+    ```
+    `runJGLOBAL_PREP.sh will call `JGLOBAL_PREP`
+
 
 5. You are now ready to run this over and over and over.

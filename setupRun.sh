@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 
 source config/config.base
 
@@ -15,10 +15,14 @@ mkdir -p $ROTDIR
 mkdir -p $ROTDIR/$CDUMP.$gPDY/$gcyc
 
 if [ $machine = "HERA" ]; then
-	stagedROTDIR="/scratch1/NCEPDEV/stmp2/Rahul.Mahajan/ROTDIR/testPrep"
+  stagedROTDIR="/scratch1/NCEPDEV/stmp2/Rahul.Mahajan/ROTDIR/testPrep"
+elif [ $machine = "WCOSS_DELL_P3" ]; then
+  stagedROTDIR="/gpfs/dell2/stmp/Rahul.Mahajan/ROTDIR/testPrep"
 else
-	echo "stagedROTDIR is only provided for HERA, ABORT!"
-	exit 1
+  echo "stagedROTDIR is only provided for:"
+  echo "HERA | WCOSS_DELL_P3"
+  echo "stagedROTDIR is NOT provided for: $machine, ABORT!"
+  exit 1
 fi
 
 $NCP $stagedROTDIR/$CDUMP.$gPDY/$gcyc/$CDUMP.t${gcyc}z.atmf*.nemsio \
