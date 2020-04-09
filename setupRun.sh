@@ -14,7 +14,7 @@ gcyc=${GDATE:8:10}
 if [ $machine = "HERA" ]; then
   stagedROTDIR="/scratch1/NCEPDEV/stmp2/Rahul.Mahajan/ROTDIR/testPrep"
 elif [ $machine = "WCOSS_DELL_P3" ]; then
-  stagedROTDIR="/gpfs/dell2/stmp/Rahul.Mahajan/ROTDIR/testPrep"
+  stagedROTDIR="/gpfs/dell2/emc/modeling/noscrub/Rahul.Mahajan/git/mkprepbufr/staged"
 else
   echo "stagedROTDIR is only provided for:"
   echo "HERA | WCOSS_DELL_P3"

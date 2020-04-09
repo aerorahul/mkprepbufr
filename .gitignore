@@ -1,3 +1,6 @@
 *.swp
 *log*
 *Log*
+staged*
+ROTDIR*
+RUNDIR*
