@@ -24,19 +24,28 @@ Extract the `prep` step of the global-workflow related to generation of prepbufr
         ```
     - A soft-link to the `$ROTDIR` and `$RUNDIR` will be placed in the experiment directory for easy access.
 
-4. Grab an interactive compute node:
-    
-    ```
-    heraFE$> salloc --partition=hera --qos=debug --account=fv3-cpu --nodes=1 --ntasks-per-node=4 --time=00:15:00 --chdir=$PWD --job-name=InteractiveJob
-    ```
-    ```
-    wcossP3FE$> bsub -Is -J InteractiveJob -P GFS-DEV -q debug -W 00:30 -n 4 -R 'span[ptile=4] affinity[core(1)]'  bash
-    ```
-    When a compute note is available, execute:
-    ```
-    $computeNode> runJGLOBAL_PREP.sh >& runLog.txt 2>&1
-    ```
-    `runJGLOBAL_PREP.sh` will call `JGLOBAL_PREP`
+4. Grab an interactive compute node or submit the job to the queue. The script `submitRun.sh` set's up the runtime environment before the call to `JGLOBAL_PREP`:
 
+    On Hera, to get an interactive node, use `salloc`.  For submission use `sbatch`
+    ```
+    Interactive on Hera:
+    heraFE$> salloc --partition=hera --qos=debug --account=fv3-cpu --nodes=1 --ntasks-per-node=4 --time=00:15:00 --chdir=$PWD --job-name=InteractiveJob
+    $computeNode> submitRun.sh >& runLog.txt 2>&1
+    ```
+    ```
+    Batch mode on Hera:
+    heraFE$> sbatch --partition=hera --qos=debug --account=fv3-cpu --nodes=1 --ntasks-per-node=4 --time=00:15:00 --chdir=$PWD --job-name=JGLOBAL_PREP -e $PWD/runLog.txt -o $PWD/runLog.txt submitRun.sh
+    ```
+
+    On WCOSS Dell Phase 3 (Venus or Mars)
+    ```
+    Interactive mode on WCOSS_DELL_P3
+    wcossP3FE$> bsub -Is -J InteractiveJob -P GFS-DEV -q debug -W 00:30 -n 4 -R 'span[ptile=4] affinity[core(1)]' -cwd $PWD bash
+    $computeNode> submitRun.sh >& runLog.txt 2>&1
+    ```
+    ```
+    Batch mode on WCOSS_DELL_P3
+    wcossP3FE$> bsub -J JGLOBAL_PREP -P GFS-DEV -q debug -W 00:30 -n 4 -R 'span[ptile=4] affinity[core(1)]' -cwd $PWD -e $PWD/runLog.txt -o $PWD/runLog.txt < submitRun.sh
+    ```
 
 5. You are now ready to run this over and over and over.
