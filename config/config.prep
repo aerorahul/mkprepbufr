@@ -14,4 +14,8 @@ if [ $machine = "HERA" ]; then
   export GESROOT=/scratch1/NCEPDEV/rstprod   # set by module prod_envir on WCOSS_C
 fi
 
+# BUFRLIST indicates the list of BUFR data dump file names to process.
+# The list below is the default list in `JGLOBAL_PREP`
+export BUFRLIST="adpupa proflr aircar aircft satwnd adpsfc sfcshp vadwnd wdsatr ascatw rassda gpsipw"
+
 echo "END: config.prep"
